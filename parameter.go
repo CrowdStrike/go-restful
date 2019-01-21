@@ -59,6 +59,10 @@ type ParameterData struct {
 	AllowMultiple                           bool
 	DefaultValue                            string
 	CollectionFormat                        string
+
+	// Extensions/vendor extensions used to describe extra functionality
+	// (https://swagger.io/docs/specification/2-0/swagger-extensions/)
+	Extensions map[string]interface{}
 }
 
 // Data returns the state of the Parameter
@@ -69,6 +73,15 @@ func (p *Parameter) Data() ParameterData {
 // Kind returns the parameter type indicator (see const for valid values)
 func (p *Parameter) Kind() int {
 	return p.data.Kind
+}
+
+// AddExtension adds or updates a key=value pair to the extension map.
+func (p *Parameter) AddExtension(key string, value interface{}) *Parameter {
+	if p.data.Extensions == nil {
+		p.data.Extensions = map[string]interface{}{}
+	}
+	p.data.Extensions[key] = value
+	return p
 }
 
 func (p *Parameter) bePath() *Parameter {
